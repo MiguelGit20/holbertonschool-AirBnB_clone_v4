@@ -1,16 +1,18 @@
 $(function () {
-  const dic = [];
+  const idList = [];
+  const namesList = [];
+
   $('input[data-id]').change(function () {
     const name = $(this).attr('data-name');
     const id = $(this).attr('data-id');
+
     if (this.checked) {
-      dic.push($(this).attr('data-id'));
-      const span = "<span id='" + id + "'>" + name + '</span>';
-      $('.amenities h4').append(span);
+      idList.push(id);
+      namesList.push(name);
     } else {
-      dic.pop($(this).attr('data-id'));
-      $(`#${id}`).remove();
+      idList.pop(id);
+      namesList.pop(name);
     }
-    console.log(dic);
+    $('.amenities h4').text(namesList.join(', '));
   });
 });
