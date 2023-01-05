@@ -10,8 +10,12 @@ $(function () {
       idList.push(id);
       namesList.push(name);
     } else {
-      idList.pop(id);
-      namesList.pop(name);
+      for (let i = 0; i < namesList.length; i++) {
+        if (namesList[i] === name) {
+          namesList.splice(i, 1);
+          idList.splice(i, 1);
+        }
+      }
     }
     $('.amenities h4').text(namesList.join(', '));
   });
