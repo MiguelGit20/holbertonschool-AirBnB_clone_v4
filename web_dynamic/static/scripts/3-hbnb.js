@@ -9,29 +9,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   response.json().then(data => {
+
     for (const i of data) {
       console.log(i.name)
-     
       const newArticle = document.createElement("article");
-      const divTitleBox = document.createElement("div")
-      divTitleBox.classList.add("title_box")
+      newArticle.innerHTML = `
+        <div class="title_box">
+          <h2>${i.name}</h2>
+          <div class="price_by_night">$${i.price_by_night}</div>
+        </div>
+        <div class="information">
+          <div class="max_guest">${i.max_guest} Guest${i.max_guest > 1 ? 's' : ''}</div>
+          <div class="number_rooms">${i.number_rooms} Bedroom${i.number_rooms > 1 ? 's' : ''}</div>
+          <div class="number_bathrooms">${i.number_bathrooms} Bathroom${i.number_bathrooms > 1 ? 's' : ''} </div>
+        </div>
+        <div class="description">${i.description}</div>
+    `
+    document.querySelector(".places").appendChild(newArticle);
+     
+      // const newArticle = document.createElement("article");
+      // const divTitleBox = document.createElement("div")
+      // divTitleBox.classList.add("title_box")
 
-      const divh2 = document.createElement("h2")
-      divh2.textContent = i.name
-      const divprice = document.createElement("div")
-      divprice.classList.add("price_by_night")
-      divprice.textContent = "$" + i.price_by_night
+      // const divh2 = document.createElement("h2")
+      // divh2.textContent = i.name
+      // const divprice = document.createElement("div")
+      // divprice.classList.add("price_by_night")
+      // divprice.textContent = "$" + i.price_by_night
 
-      divTitleBox.appendChild(divh2)
-      divTitleBox.appendChild(divprice)
-      newArticle.appendChild(divTitleBox)
+      // divTitleBox.appendChild(divh2)
+      // divTitleBox.appendChild(divprice)
+      // newArticle.appendChild(divTitleBox)
 
-      document.querySelector(".places").appendChild(newArticle);
-      
-      // const newElement = document.createElement("div");
-      // newElement.classList.add("div");
-      // newElement.textContent = "soy un div creado con javascript";
-      // document.querySelector(".container").appendChild(newElement);
+      // document.querySelector(".places").appendChild(newArticle);
     }});
 
   const apiClass = document.querySelector('.api_status');
