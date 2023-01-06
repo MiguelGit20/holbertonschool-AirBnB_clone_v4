@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         apiClass.classList.remove('available');
       }
     });
+
+  const button = document.querySelector('button')
+  button.addEventListener('click', function () {
+    
+  })
 });
 
 $(function () {
