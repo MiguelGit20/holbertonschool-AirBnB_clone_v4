@@ -87,15 +87,14 @@ $(function () {
           const places = document.querySelector('.places');
           places.innerHTML = ""
           if (response.length === 0) {
+            places.setAttribute("id", "not_places")
             const noPlaces = document.createElement('div');
-            noPlaces.setAttribute("id", "no_places")
             noPlaces.innerHTML = `
-            <div>
               <p>No places matched with this list of amenities: <b>${namesList.join(', ')}</b>.</p>
-            </div>
             `
             places.appendChild(noPlaces)
           } else {
+            places.removeAttribute('id')
           for (const i of response) {
             const newArticle = document.createElement('article');
             newArticle.innerHTML = `
