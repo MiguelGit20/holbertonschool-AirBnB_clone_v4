@@ -1,20 +1,39 @@
 // JavaScript Script
-document.addEventListener('DOMContentLoaded', async () => {
-  // Function that makes a POST request to the API to retrieve the places and add them to the page.
 
-  const response = await fetch('http://127.0.0.1:5001/api/v1/places_search/', {
+function displayLoading () {
+// Function that display loading animation while content is ready
+  const places = document.querySelector('.places');
+  places.innerHTML = '';
+  places.setAttribute('id', 'onLoad');
+  const loader = document.createElement('div');
+  loader.setAttribute('id', 'loading');
+  places.appendChild(loader);
+}
+
+function hideLoading () {
+// Function that hides loading animation
+  const places = document.querySelector('.places');
+  places.removeAttribute('id');
+  places.innerHTML = '';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Function that makes a POST request to the API to retrieve the places and add them to the page.
+  displayLoading();
+  fetch('http://127.0.0.1:5001/api/v1/places_search/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: '{}'
-  });
-
-  response.json().then(data => {
-    for (const i of data) {
-      const newArticle = document.createElement('article');
-      newArticle.innerHTML = `
+  })
+    .then(response => response.json())
+    .then(response => {
+      hideLoading();
+      for (const i of response) {
+        const newArticle = document.createElement('article');
+        newArticle.innerHTML = `
         <div class="title_box">
           <h2>${i.name}</h2>
           <div class="price_by_night">$${i.price_by_night}</div>
@@ -26,14 +45,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
           <div class="description">${i.description}</div>
           `;
-      document.querySelector('.places').appendChild(newArticle);
-    }
-  });
+        document.querySelector('.places').appendChild(newArticle);
+      }
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Function that adds functionality to the search button in filter Section.
-
   // Function that makes a request to the API and checks the status.
 
   const apiClass = document.querySelector('.api_status');
@@ -53,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 $(function () {
   const idList = [];
   const namesList = [];
+  const places = document.querySelector('.places');
 
   $('input[data-id]').change(function () {
     const name = $(this).attr('data-name');
@@ -73,6 +91,8 @@ $(function () {
 
     const button = document.querySelector('button');
     button.addEventListener('click', function () {
+      // Function that adds functionality to the search button in filter Section.
+      displayLoading();
       fetch('http://127.0.0.1:5001/api/v1/places_search/', {
         method: 'POST',
         headers: {
@@ -82,22 +102,20 @@ $(function () {
         body: JSON.stringify({ amenities: idList })
       })
         .then(response => response.json())
-        // .then(response => console.log(JSON.stringify(response)));
         .then(response => {
-          const places = document.querySelector('.places');
-          places.innerHTML = ""
+          hideLoading();
           if (response.length === 0) {
-            places.setAttribute("id", "not_places")
+            places.setAttribute('id', 'not_places');
             const noPlaces = document.createElement('div');
             noPlaces.innerHTML = `
-              <p>No places matched with this list of amenities: <b>${namesList.join(', ')}</b>.</p>
-            `
-            places.appendChild(noPlaces)
+              <p>No places found with this list of amenities: <b>${namesList.join(', ')}</b>.</p>
+            `;
+            places.appendChild(noPlaces);
           } else {
-            places.removeAttribute('id')
-          for (const i of response) {
-            const newArticle = document.createElement('article');
-            newArticle.innerHTML = `
+            places.removeAttribute('id');
+            for (const i of response) {
+              const newArticle = document.createElement('article');
+              newArticle.innerHTML = `
               <div class="title_box">
                 <h2>${i.name}</h2>
                 <div class="price_by_night">$${i.price_by_night}</div>
@@ -109,8 +127,9 @@ $(function () {
                 </div>
                 <div class="description">${i.description}</div>
                 `;
-            document.querySelector('.places').appendChild(newArticle);
-          }}
+              document.querySelector('.places').appendChild(newArticle);
+            }
+          }
         });
     });
   });
